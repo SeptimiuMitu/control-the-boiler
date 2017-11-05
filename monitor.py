@@ -18,7 +18,7 @@ def check_temperature(temp):
     elif temp > target_tmp + threshold_temp:
         return "Turn Off"
     else:
-        return "No Action"
+        return "No Action Requested"
 
 # store the temperature in the database
 def log_temperature(temp):
@@ -35,12 +35,12 @@ def log_temperature(temp):
 
 #log action requests
 def log_action_request(action_request):
-    
+
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
-    
+
     curs.execute("INSERT INTO actions values(datetime('now'), (?))", (action_request,))
-    
+
     # commit the changes
     conn.commit()
     conn.close()
@@ -70,7 +70,7 @@ def get_temp(devicefile):
     except:
         return None
 
-    # get the status from the end of line 1 
+    # get the status from the end of line 1
     status = lines[0][-4:-1]
 
     # is the status is ok, get the temperature from line 2
@@ -87,7 +87,7 @@ def get_temp(devicefile):
 
 
 # main function
-# This is where the program starts 
+# This is where the program starts
 def main():
 
     # enable kernel modules
@@ -125,7 +125,3 @@ def main():
 
 if __name__=="__main__":
     main()
-
-
-
-
