@@ -18,7 +18,7 @@ def check_temperature(temp):
     elif temp > target_tmp + threshold_temp:
         return "Turn Off"
     else:
-        return "No Action Requested"
+        return "No Requested"
 
 # store the temperature in the database
 def log_temperature(temp):
