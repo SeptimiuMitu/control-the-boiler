@@ -18,9 +18,6 @@ def get_last_action():
     result=curs.fetchone()
     conn.close()
 
-def execute_action(action)
-
-
 # main function
 def main():
     get_last_action()
