@@ -10,13 +10,17 @@ import controlrelay
 # global variables
 dbname='/var/www/templog.db'
 
-# display the contents of the database
+# Get the last action
 def get_last_action():
-    conn=sqlite3.connect(dbname)
-    curs=conn.cursor()
-    for row in curs.execute("SELECT action FROM actions order by timestamp desc limit 1"):
-        print str(row[0])
-    conn.close()
+    connection=sqlite3.connect(dbname)
+    cursor=conn.cursor()
+    cursor.execute("SELECT action FROM actions order by timestamp desc limit 1"):
+    result=cursor.fetcone()[0]
+    connection.close()
+    return result
+
+def execute_action(action)
+
 
 # main function
 def main():
