@@ -5,20 +5,21 @@ import sqlite3
 import os
 import time
 import glob
-
 # global variables
 dbname='/var/www/templog.db'
 target_tmp=22
 threshold_temp=0.5
-
+action_on=1
+action_off=0
+action_none=2
 #check temperature against target and act if required
 def check_temperature(temp):
-    if temp <= target_tmp - threshold_temp:
-        return "Turn On"
+    if temp <= (target_tmp - threshold_temp):
+        return action_on
     elif temp > target_tmp + threshold_temp:
-        return "Turn Off"
+        return action_off
     else:
-        return "No Requested"
+        return action_none
 
 # store the temperature in the database
 def log_temperature(temp):
