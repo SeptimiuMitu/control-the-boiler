@@ -1,25 +1,22 @@
 #!/usr/bin/env python
 
 import sqlite3
-
 import os
 import time
 import glob
+import config
+
 # global variables
 dbname='/var/www/templog.db'
-target_tmp=22
-threshold_temp=0.5
-action_on=1
-action_off=0
-action_none=2
+
 #check temperature against target and act if required
 def check_temperature(temp):
-    if temp <= (target_tmp - threshold_temp):
-        return action_on
-    elif temp > target_tmp + threshold_temp:
-        return action_off
+    if temp <= (config.target_tmp - config.threshold_temp):
+        return config.action_on
+    elif temp > config.target_tmp + config.threshold_temp:
+        return config.action_off
     else:
-        return action_none
+        return config.action_none
 
 # store the temperature in the database
 def log_temperature(temp):
@@ -46,31 +43,15 @@ def log_action_request(action_request):
     conn.commit()
     conn.close()
 
-
-# display the contents of the database
-def display_data():
-
-    conn=sqlite3.connect(dbname)
-    curs=conn.cursor()
-
-    for row in curs.execute("SELECT * FROM temps"):
-        print str(row[0])+"	"+str(row[1])
-
-    conn.close()
-
-
-
 # get temerature
 # returns None on error, or the temperature as a float
 def get_temp(devicefile):
-
     try:
         fileobj = open(devicefile,'r')
         lines = fileobj.readlines()
         fileobj.close()
     except:
         return None
-
     # get the status from the end of line 1
     status = lines[0][-4:-1]
 
@@ -84,11 +65,7 @@ def get_temp(devicefile):
     else:
         print "There was an error."
         return None
-
-
-
 # main function
-# This is where the program starts
 def main():
 
     # enable kernel modules
