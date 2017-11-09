@@ -14,7 +14,7 @@ dbname='/var/www/templog.db'
 def get_last_action():
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
-    curs.execute("SELECT action FROM actions order by timestamp desc limit 1"):
+    curs.execute("SELECT action FROM actions order by timestamp desc limit 1")
     result=curs.fetchone()
     conn.close()
 
