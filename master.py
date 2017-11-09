@@ -10,7 +10,7 @@ import controlrelay
 # global variables
 dbname='/var/www/templog.db'
 
-# display the contents of the database
+# Get the last action
 def get_last_action():
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
