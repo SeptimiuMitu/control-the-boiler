@@ -12,11 +12,11 @@ import config
 dbname='/var/www/templog.db'
 # Get the last action
 def get_last_action():
-    connection=sqlite3.connect(dbname)
-    cursor1=connection.cursor()
-    cursor1.execute("SELECT action FROM actions order by timestamp desc limit 1"):
-    result=cursor1.fetchone()
-    connection.close()
+    conn=sqlite3.connect(dbname)
+    curs=conn.cursor()
+    curs.execute("SELECT action FROM actions order by timestamp desc limit 1"):
+    result=curs.fetchone()
+    conn.close()
 
 def execute_action(action)
 
