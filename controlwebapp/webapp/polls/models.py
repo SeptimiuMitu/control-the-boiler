@@ -19,3 +19,9 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+class TemperatureReading(models.Model):
+    tempvalue = models.DecimalField(max_digits=5, decimal_places=2)
+    timetaken = models.DateTimeField()
+    def __str__(self):
+        return str(self.tempvalue)
