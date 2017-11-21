@@ -9,7 +9,10 @@ from django.utils import timezone
 import unittest
 from .models import Choice, Question
 # Create your views here.
-
+import arrow
+from django.views.generic import TemplateView
+from django.contrib.auth.models import User
+import random
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -36,26 +39,21 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-class QuestionDetailViewTests(unittest.TestCase):
-    def test_future_question(self):
-        """
-        The detail view of a question with a pub_date in the future
-        returns a 404 not found.
-        """
-        future_question = create_question(question_text='Future question.', days=5)
-        url = reverse('polls:detail', args=(future_question.id,))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+class AnalyticsIndexView(TemplateView):
+    template_name = 'polls/chart.html'
+    def get_context_data(self, **kwargs):
+        context = super(AnalyticsIndexView, self).get_context_data(**kwargs)
+        context['30_day_registrations'] = self.thirty_day_registrations()
+        return context
 
-    def test_past_question(self):
-        """
-        The detail view of a question with a pub_date in the past
-        displays the question's text.
-        """
-        past_question = create_question(question_text='Past Question.', days=-5)
-        url = reverse('polls:detail', args=(past_question.id,))
-        response = self.client.get(url)
-        self.assertContains(response, past_question.question_text)
+    def thirty_day_registrations(self):
+        final_data = []
+        date = arrow.now()
+        for day in xrange(1, 30):
+            date = date.replace(days=-1)
+            count = random.randint(1,100)
+            final_data.append(count)
+        return final_data
 
 
 def vote(request, question_id):
