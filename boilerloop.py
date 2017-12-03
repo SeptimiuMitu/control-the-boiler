@@ -1,14 +1,15 @@
 import time
 import gmailhelper
 import config
-import random
-
+import controlrelay
 GMAIL_LABEL_CURRENT_TEMPERATURE = "currenttemp"
 GMAIL_LABEL_TARGET_TEMPERATURE = "targettemp"
 #connect to gmail
 def heater_start():
+    controlrelay.trigger_relay_on()
     print "HEATING ON\n"
 def heater_stop():
+    controlrelay.trigger_relay_off()
     print "HEATING OFF\n"
 
 def get_current_temperature():
