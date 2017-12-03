@@ -40,7 +40,7 @@ def send_gmail(subject,body):
         msg = MIMEMultipart()
         msg['From'] = config.FROM_EMAIL
         msg['To'] = config.TO_EMAIL
-        msg['Subject'] = subject
+        msg['Subject'] = str(subject)
         body = body
         msg.attach(MIMEText(body, 'plain'))
         server = smtplib.SMTP(config.SMTP_SERVER,config.SMTP_PORT)

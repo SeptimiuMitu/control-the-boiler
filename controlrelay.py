@@ -2,6 +2,11 @@
 
 import RPi.GPIO as GPIO
 from time import sleep
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 # global variables
 GPIO_PIN=18
 def set_gpio ():
@@ -17,10 +22,11 @@ def trigger_bistable_relay(gpio_pin):
 #turn on the relay.
 def trigger_relay_on():
     GPIO.output(GPIO_PIN,GPIO.HIGH)
+    logger.info("control relay trigger_relay_on")
 
 def trigger_relay_off():
     GPIO.output(GPIO_PIN,GPIO.LOW)
-
+    logger.info("control relay trigger_relay_off")
 def main():
     set_gpio()
     trigger_relay_on()

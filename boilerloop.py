@@ -2,13 +2,17 @@ import time
 import gmailhelper
 import config
 import controlrelay
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def heater_start():
     controlrelay.trigger_relay_on()
-    print "HEATING ON\n"
+    logger.info("HEATING ON\n")
 def heater_stop():
     controlrelay.trigger_relay_off()
-    print "HEATING OFF\n"
+    logger.info("HEATING OFF\n")
 
 def get_target_temperature():
     try:
@@ -22,22 +26,22 @@ def get_target_temperature():
         return target_temperature
     except Exception, e:
         target_temperature=config.DEFAULT_TEMP
-        print "error getting current temperature" + str(e)
+        logger.error("error getting current temperature" + str(e))
 
 def get_current_temperature():
     try:
         return float(gmailhelper.get_mail_subject(gmailhelper.get_last_gmail_from_label(config.GMAIL_LABEL_CURRENT_TEMPERATURE)))
     except Exception, e:
         target_temperature=config.DEFAULT_TEMP
-        print "error getting target temperature" + str(e)
+        logger.error("error getting target temperature" + str(e))
 
 def main():
     controlrelay.set_gpio()
     while True:
         current_temperature = get_current_temperature()
-        print current_temperature
+        logger.debug(current_temperature)
         target_temperature = get_target_temperature()
-        print target_temperature
+        logger.debug(target_temperature)
         if (current_temperature <= target_temperature):
             heater_start()
         else:
