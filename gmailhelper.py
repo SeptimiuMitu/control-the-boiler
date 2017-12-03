@@ -6,6 +6,14 @@ import email
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import config
+import logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.FileHandler('gmailhelper.log')
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 def get_last_gmail_from_label(gmail_label):
     try:
@@ -19,7 +27,7 @@ def get_last_gmail_from_label(gmail_label):
         type, data = mail.fetch(latest_email_id, '(RFC822)' )
         return data
     except Exception, e:
-        print str(e)
+        logger.error(str(e))
 
 def get_mail_subject(full_email):
     for response_part in full_email:
@@ -50,11 +58,11 @@ def send_gmail(subject,body):
         server.sendmail(config.FROM_EMAIL, config.TO_EMAIL, text)
         server.quit()
     except Exception, e:
-        print str(e)
+        logger.error(str(e))
 
 def main():
     last_mail = get_last_gmail_from_label(GMAIL_LABEL_TARGET_TEMPERATURE)
-    print get_mail_from_mail(last_mail)
+    logger.info(get_mail_from_mail(last_mail))
 
 
 if __name__ == "__main__":
