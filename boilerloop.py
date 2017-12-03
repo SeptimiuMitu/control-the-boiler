@@ -27,6 +27,7 @@ def get_target_temperature():
         print "error getting target temperature" + str(e)
 
 def main():
+    controlrelay.set_gpio()
     while True:
         current_temperature = get_current_temperature()
         print current_temperature
