@@ -4,26 +4,17 @@ import imaplib
 import email
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
-
+import config
 # -------------------------------------------------
 #
 # Utility to read email from Gmail Using Python
 #
 # ------------------------------------------------
-ORG_EMAIL   = "@gmail.com"
-FROM_EMAIL  = "johndoe" + ORG_EMAIL
-FROM_PWD    = "password"
-TO_EMAIL    = "johndoe" + ORG_EMAIL
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT   = 587
-IMAP_SERVER = "imap.gmail.com"
-IMAP_PORT   = 993
-LABEL_TO_READ = 'currenttemp'
 
 def get_last_gmail_from_label(gmail_label):
     try:
-        mail = imaplib.IMAP4_SSL(IMAP_SERVER)
-        mail.login(FROM_EMAIL,FROM_PWD)
+        mail = imaplib.IMAP4_SSL(config.IMAP_SERVER)
+        mail.login(config.FROM_EMAIL,config.FROM_PWD)
         mail.select(gmail_label)
         type, data = mail.search(None, 'ALL')
         mail_ids = data[0]
@@ -42,21 +33,24 @@ def get_subject_from_mail(full_email):
             return email_subject
 
 def send_gmail(subject,body):
-    msg = MIMEMultipart()
-    msg['From'] = FROM_EMAIL
-    msg['To'] = TO_EMAIL
-    msg['Subject'] = subject
-    body = body
-    msg.attach(MIMEText(body, 'plain'))
-    server = smtplib.SMTP(SMTP_SERVER,SMTP_PORT)
-    server.starttls()
-    server.login(FROM_EMAIL, FROM_PWD)
-    text = msg.as_string()
-    server.sendmail(FROM_EMAIL, TO_EMAIL, text)
-    server.quit()
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = config.FROM_EMAIL
+        msg['To'] = config.TO_EMAIL
+        msg['Subject'] = subject
+        body = body
+        msg.attach(MIMEText(body, 'plain'))
+        server = smtplib.SMTP(config.SMTP_SERVER,config.SMTP_PORT)
+        server.starttls()
+        server.login(config.FROM_EMAIL, config.FROM_PWD)
+        text = msg.as_string()
+        server.sendmail(config.FROM_EMAIL, config.TO_EMAIL, text)
+        server.quit()
+    except Exception, e:
+        print str(e)
 
 def main():
-    last_mail = get_last_gmail_from_label(LABEL_TO_READ)
+    last_mail = get_last_gmail_from_label(config.LABEL_TO_READ)
     send_gmail(str(float(get_subject_from_mail(last_mail))+0.2),'currenttemp')
 
 if __name__ == "__main__":

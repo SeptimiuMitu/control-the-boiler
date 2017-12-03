@@ -14,11 +14,8 @@ import arrow
 from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 import random
-<<<<<<< HEAD
 from decimal import Decimal
 
-=======
->>>>>>> 62de621f44c02fa21d5e9ecc610984225d516ddb
 
 class IndexView(generic.ListView):
     template_name = 'polls/index.html'
@@ -54,19 +51,11 @@ class AnalyticsIndexView(TemplateView):
 
     def thirty_day_registrations(self):
         final_data = []
-<<<<<<< HEAD
         all_temperature_readings = TemperatureReading.objects.all()
         for current_temperature_reading in all_temperature_readings:
             final_data.append(float(current_temperature_reading.tempvalue))
             print current_temperature_reading.tempvalue
         print final_data
-=======
-        date = arrow.now()
-        for day in xrange(1, 30):
-            date = date.replace(days=-1)
-            count = random.randint(1,100)
-            final_data.append(count)
->>>>>>> 62de621f44c02fa21d5e9ecc610984225d516ddb
         return final_data
 
 
