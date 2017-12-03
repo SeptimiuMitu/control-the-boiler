@@ -57,6 +57,7 @@ def send_gmail(subject,body):
         text = msg.as_string()
         server.sendmail(config.FROM_EMAIL, config.TO_EMAIL, text)
         server.quit()
+        logger.info("gmailhelper sent email")
     except Exception, e:
         logger.error(str(e))
 

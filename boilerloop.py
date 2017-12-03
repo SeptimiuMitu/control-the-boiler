@@ -53,6 +53,7 @@ def main():
             heater_start()
         else:
             heater_stop()
+        logger.info("current %s target %s", current_temperature, target_temperature)
         time.sleep(5)
 
 if __name__ == "__main__":
