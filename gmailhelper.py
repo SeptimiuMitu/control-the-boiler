@@ -1,3 +1,4 @@
+import string
 import smtplib
 import time
 import imaplib
@@ -5,11 +6,6 @@ import email
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 import config
-# -------------------------------------------------
-#
-# Utility to read email from Gmail Using Python
-#
-# ------------------------------------------------
 
 def get_last_gmail_from_label(gmail_label):
     try:
@@ -25,12 +21,19 @@ def get_last_gmail_from_label(gmail_label):
     except Exception, e:
         print str(e)
 
-def get_subject_from_mail(full_email):
+def get_mail_subject(full_email):
     for response_part in full_email:
         if isinstance(response_part, tuple):
             msg = email.message_from_string(response_part[1])
             email_subject = msg['subject']
             return email_subject
+
+def get_mail_from_mail(full_email):
+    for response_part in full_email:
+        if isinstance(response_part, tuple):
+            msg = email.message_from_string(response_part[1])
+            email_from_elements = msg['from'].split()
+            return str.translate(email_from_elements[len(email_from_elements)-1],None,"<>")
 
 def send_gmail(subject,body):
     try:
@@ -50,8 +53,9 @@ def send_gmail(subject,body):
         print str(e)
 
 def main():
-    last_mail = get_last_gmail_from_label(config.LABEL_TO_READ)
-    send_gmail(str(float(get_subject_from_mail(last_mail))+0.2),'currenttemp')
+    last_mail = get_last_gmail_from_label(GMAIL_LABEL_TARGET_TEMPERATURE)
+    print get_mail_from_mail(last_mail)
+
 
 if __name__ == "__main__":
     main()

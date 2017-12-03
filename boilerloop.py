@@ -2,9 +2,7 @@ import time
 import gmailhelper
 import config
 import controlrelay
-GMAIL_LABEL_CURRENT_TEMPERATURE = "currenttemp"
-GMAIL_LABEL_TARGET_TEMPERATURE = "targettemp"
-#connect to gmail
+
 def heater_start():
     controlrelay.trigger_relay_on()
     print "HEATING ON\n"
@@ -12,16 +10,23 @@ def heater_stop():
     controlrelay.trigger_relay_off()
     print "HEATING OFF\n"
 
-def get_current_temperature():
+def get_target_temperature():
     try:
-        return float(gmailhelper.get_subject_from_mail(gmailhelper.get_last_gmail_from_label(config.GMAIL_LABEL_CURRENT_TEMPERATURE)))
+        lastemail = gmailhelper.get_last_gmail_from_label(config.GMAIL_LABEL_TARGET_TEMPERATURE)
+        subject = gmailhelper.get_mail_subject(lastemail)
+        fromemail = gmailhelper.get_mail_from_mail(lastemail)
+        if fromemail == config.GMAIL_FROM_CALENDAR:
+            target_temperature = float(subject.split()[1])
+        else:
+            target_temperature = float(subject)
+        return target_temperature
     except Exception, e:
         target_temperature=config.DEFAULT_TEMP
         print "error getting current temperature" + str(e)
 
-def get_target_temperature():
+def get_current_temperature():
     try:
-        return float(gmailhelper.get_subject_from_mail(gmailhelper.get_last_gmail_from_label(config.GMAIL_LABEL_TARGET_TEMPERATURE)))
+        return float(gmailhelper.get_mail_subject(gmailhelper.get_last_gmail_from_label(config.GMAIL_LABEL_CURRENT_TEMPERATURE)))
     except Exception, e:
         target_temperature=config.DEFAULT_TEMP
         print "error getting target temperature" + str(e)
